@@ -26,6 +26,7 @@ export default function Home() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const totalCircles = rows * cols;
+      let forward = true;
       if (e.key === "PageDown" || e.key === "ArrowRight") {
         setSelectedIndex((prev) => Math.min(prev + 1, totalCircles - 1));
       } else if (e.key === "ArrowLeft") {
@@ -43,7 +44,22 @@ export default function Home() {
           newStates[selectedIndex] = newStates[selectedIndex] === "red" ? "green" : "red";
           return newStates;
         });
-        setSelectedIndex((prev) => Math.min(prev + 1, totalCircles - 1));
+        if((prev + 1 % cols == 0 && forward !== false) && prev !== 0){
+          forward = false;
+          setSelectedIndex((prev) => Math.min(prev + cols, totalCircles - 1));
+        }
+
+        if(prev % cols == 0 && forward !== true){
+          forward = true;
+          setSelectedIndex((prev) => Math.min(prev + cols, totalCircles - 1));
+        }
+        if(forward){
+          setSelectedIndex((prev) => Math.min(prev + 1, totalCircles - 1));
+        }
+
+        if(!forward){
+          setSelectedIndex((prev) => Math.min(prev - 1, totalCircles - 1));
+        }
       }
     };
 
